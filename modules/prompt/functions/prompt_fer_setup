@@ -15,6 +15,7 @@
 # %m => shortname host
 # %(?..) => prompt conditional - %(condition.true.false)
 
+echo "PROMPT_SUBST = $PROMPT_SUBST"
 
 # turns seconds into human readable time
 # 165392 => 1d 21h 56m 32s
@@ -71,7 +72,7 @@ prompt_pure_precmd() {
 
     # This is the only change for now: added [] to path (yellow) and made path
     # show ~ only for home (not for dirs stored in variable: ~FOO and the like)
-    local prompt_pure_preprompt='\n%F{yellow}[%f%F{blue}${PWD/#$HOME/~}%F{yellow}]%f%F{242}$vcs_info_msg_0_`prompt_pure_git_dirty` $prompt_pure_username%f %F{yellow}`prompt_pure_cmd_exec_time`%f'
+    local prompt_pure_preprompt='\n%F{yellow}[%B%F{cyan}${PWD/#$HOME/~}%b%F{yellow}]%F{242}$vcs_info_msg_0_`prompt_pure_git_dirty` $prompt_pure_username%f %F{yellow}`prompt_pure_cmd_exec_time`%f'
     print -P $prompt_pure_preprompt
 
     # check async if there is anything to pull
@@ -84,7 +85,7 @@ prompt_pure_precmd() {
         command git rev-parse --abbrev-ref @'{u}' &>/dev/null &&
         (( $(command git rev-list --right-only --count HEAD...@'{u}' 2>/dev/null) > 0 )) &&
         # some crazy ansi magic to inject the symbol into the previous line
-        print -Pn "\e7\e[A\e[1G\e[`prompt_pure_string_length $prompt_pure_preprompt`C%F{cyan}⇣%f\e8"
+        print -Pn "\e7\e[A\e[1G\e[`prompt_pure_string_length $prompt_pure_preprompt`C%F{blue}⇣%f\e8"
     } &!
 
     # reset value since `preexec` isn't always triggered
