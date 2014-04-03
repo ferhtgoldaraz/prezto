@@ -12,3 +12,5 @@ fi
 
 # Customize to your needs...
 alias uptodate="debu && sudo apt-fast -y upgrade"
+
+prompt fer

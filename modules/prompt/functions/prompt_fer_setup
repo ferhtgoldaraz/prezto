@@ -71,7 +71,7 @@ prompt_pure_precmd() {
 
     # This is the only change for now: added [] to path (yellow) and made path
     # show ~ only for home (not for dirs stored in variable: ~FOO and the like)
-    local prompt_pure_preprompt='\n%F{yellow}[%f{yellow}%F{blue}${PWD/#$HOME/~}%F{yellow}]%f{yellow}%F{242}$vcs_info_msg_0_`prompt_pure_git_dirty` $prompt_pure_username%f %F{yellow}`prompt_pure_cmd_exec_time`%f'
+    local prompt_pure_preprompt='\n%F{yellow}[%f%F{blue}${PWD/#$HOME/~}%F{yellow}]%f%F{242}$vcs_info_msg_0_`prompt_pure_git_dirty` $prompt_pure_username%f %F{yellow}`prompt_pure_cmd_exec_time`%f'
     print -P $prompt_pure_preprompt
 
     # check async if there is anything to pull
