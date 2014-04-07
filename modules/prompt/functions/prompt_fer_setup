@@ -64,7 +64,7 @@ function prompt_sorin_setup {
   _newline=$'\n'
   _lineup=$(echo '\e[1A')
   _linedown=$(echo '\e[1B')
-  PROMPT='%F{yellow}[%B%F{cyan}${prompt_sorin_pwd}%b%F{yellow}]%f${git_info:+${(e)git_info[prompt]}}%(!.%B%F{red}#%f%b.)${_newline}${editor_info[keymap]} '
+  PROMPT='%F{yellow}[%B%F{cyan}${prompt_sorin_pwd}%b%F{yellow}]%f${git_info:+${(e)git_info[prompt]}}${_newline}%(!.%B%F{red}#%f%b.)${editor_info[keymap]} '
   RPROMPT='%{${_lineup}%}${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}%{${_linedown}%}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
