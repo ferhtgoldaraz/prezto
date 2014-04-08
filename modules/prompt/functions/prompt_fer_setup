@@ -62,10 +62,10 @@ function prompt_sorin_setup {
 
   # Define prompts.
   _newline=$'\n'
-  _lineup=$(echo '\e[1A')
-  _linedown=$(echo '\e[1B')
+  _lineup=$'\e[1Am'
+  _linedown=$'\e[1B'
   PROMPT='$(test "$SSH_CONNECTION" && echo "%F{green}%m%f " || echo "")%F{yellow}[%B%F{cyan}${prompt_sorin_pwd}%b%F{yellow}]%f${git_info:+${(e)git_info[prompt]}}${_newline}%(!.%B%F{red}#%f%b.)${editor_info[keymap]} '
-  RPROMPT='%{${_lineup}%}${editor_info[overwrite]}%(?:: %F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}%{${_linedown}%}'
+  RPROMPT='%{${_lineup}%}${editor_info[overwrite]}${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}%{${_linedown}%}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
 
