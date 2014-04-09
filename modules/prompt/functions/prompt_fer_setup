@@ -22,6 +22,8 @@ function prompt_sorin_precmd {
   if (( $+functions[git-info] )); then
     git-info
   fi
+
+  echo ""
 }
 
 function prompt_sorin_setup {
