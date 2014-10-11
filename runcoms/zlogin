@@ -20,3 +20,5 @@ if (( $+commands[fortune] )); then
   print
 fi
 
+# refresh command completion allways (uses RAM)
+zstyle ":completion:*:commands" rehash 1
