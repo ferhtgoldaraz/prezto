@@ -10,3 +10,8 @@ if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
 
+# Customize to your needs...
+alias install="sudo apt-fast -y install"
+alias ppadd="sudo add-apt-repository"
+alias uptodate="debu && sudo apt-fast -y upgrade"
+alias grep="grep --color=always"
