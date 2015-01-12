@@ -10,8 +10,53 @@ if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
 
-# Customize to your needs...
-alias install="sudo apt-fast -y install"
-alias ppadd="sudo add-apt-repository"
+# enable alias in sudo
+function my_sudo {
+    while [[ $# > 0 ]]; do
+        case "$1" in
+        command) shift ; break ;;
+        nocorrect|noglob) shift ;;
+        *) break ;;
+        esac
+    done
+    if [[ $# = 0 ]]; then
+        command sudo zsh
+    else
+        noglob command sudo $@
+    fi
+}
+
+alias sudo="my_sudo "
+alias please="/usr/bin/sudo "
+
+# some alias
+alias aptinstall="/usr/bin/sudo apt-fast -y install"
+alias ppadd="sudo add-apt-repository -y"
 alias uptodate="debu && sudo apt-fast -y upgrade"
 alias grep="grep --color=always"
+
+# bitnami
+alias bitnami-env="source $HOME/src/bitnami-env.zsh"
+alias bitnami2-env="source $HOME/src/bitnami2-env.zsh"
+alias btnstart="bitnami-env && ctl-bitnami start"
+alias benv="bitnami-env"
+
+# nvm related
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+alias node='$NVM_BIN/node'
+alias npm='$NVM_BIN/npm'
+
+# php related
+source "$HOME/.phpbrew/bashrc"
+# fix phpbrew bug
+phpbrew use "$(phpbrew use | cut -d" " -f3)"
+COMPOSER_HOME="$HOME/.composer"
+path+=($COMPOSER_HOME/vendor/bin) # since zprofile has typeset -gU ... path
+
+# force firefox accel
+export MOZ_USE_OMTC=1
+export MOZ_OMTC_ENABLED=1 firefox
+alias firefox="MOZ_USE_OMTC=1 MOZ_OMTC_ENABLED=1 /usr/bin/firefox >| ~/firefox-log.txt 2>&1 &"
+
+

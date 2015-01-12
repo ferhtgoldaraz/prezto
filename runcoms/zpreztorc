@@ -55,12 +55,12 @@ zstyle ':prezto:load' pmodule \
   'helper' \
   'node' \
   'python' \
-  'ruby' \
   'ssh' \
   'k' \
   'syntax-highlighting' \
   'history-substring-search' \
   'prompt' \
+  'ruby' \
 
 #
 # Editor
