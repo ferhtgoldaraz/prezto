@@ -13,3 +13,23 @@ fi
 # Customize to your needs...
 alias please="/usr/bin/sudo "
 alias grep="grep --color=always"
+
+# Mac OS especific
+if [[ "$OSTYPE" == darwin* ]]; then
+  
+  	# set MANPATH var. The crap about man.conf
+  	# has gotten me tired, and I don't see anything in the
+  	# mappings that's not already included before in `man --path`
+  	# though MANPATH lines, so just set it to whatever `man --path` is
+  	if [ -z "$MANPATH" ]; then
+  		MANPATH=$(man --path)
+	fi
+
+	# shadow bsd man pages with gnu ones, if findable
+	brew --prefix coreutils &> /dev/null || return 1
+	brew --prefix gnu-sed &> /dev/null || return 1
+
+	MANPATH="$(brew --prefix coreutils)/libexec/gnuman:$MANPATH"
+	MANPATH="$(brew --prefix gnu-sed)/libexec/gnuman:$MANPATH"
+	export MANPATH
+fi

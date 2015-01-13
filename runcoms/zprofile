@@ -44,9 +44,16 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   /usr/local/{bin,sbin}
-  $HOME/bin(-/N)P
+  $HOME/bin
+  $(brew --prefix coreutils 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  $(brew --prefix gnu-sed 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  $(brew --prefix gnu-tar 2> /dev/null)/libexec/gnubin # on failure, see next stmt
   $path
 )
+
+# this removes whatever is not a directory or doesn't exist
+# it lets me modify path in different OSes with less worries
+path=($^path(N))
 
 #
 # Less
