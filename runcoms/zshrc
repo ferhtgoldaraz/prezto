@@ -14,9 +14,33 @@ fi
 alias please="/usr/bin/sudo "
 alias grep="grep --color=always"
 
+# if phpbrew, source
+source ~/.phpbrew/bashrc 2> /dev/null
+
+# bitnami path function
+# the path is hard-coded, something should be done about that
+function bitnami-env() {
+  : ${__bitnami_path_is_on:=0}
+
+  if [[ -z "$__bitnami_path" ]]; then
+    __bitnami_path=( $(find ~/Servers -type d -name bin | grep -v htdocs) )
+  fi
+
+  if [[ "$1" == "off" ]]; then
+
+    path=( ${path:|__bitnami_path} )
+    __bitnami_path_is_on=0
+
+  elif [[ $__bitnami_path_is_on == 0 ]]; then
+
+      path=( $__bitnami_path $path )
+      __bitnami_path_is_on=1
+  fi
+}
+
 # Mac OS especific
 if [[ "$OSTYPE" == darwin* ]]; then
-  
+
   	# set MANPATH var. The crap about man.conf
   	# has gotten me tired, and I don't see anything in the
   	# mappings that's not already included before in `man --path`
@@ -29,7 +53,25 @@ if [[ "$OSTYPE" == darwin* ]]; then
 	brew --prefix coreutils &> /dev/null || return 1
 	brew --prefix gnu-sed &> /dev/null || return 1
 
-	MANPATH="$(brew --prefix coreutils)/libexec/gnuman:$MANPATH"
-	MANPATH="$(brew --prefix gnu-sed)/libexec/gnuman:$MANPATH"
+    MANPATH="$(find $(brew --prefix) -name man | tr '\n' ':')$MANPATH"
+    MANPATH="$(find $(brew --prefix) -name gnuman | tr '\n' ':')$MANPATH"
 	export MANPATH
+
+  # following the brew instructions...
+  sudo pkill ssh-agent
+  eval $(ssh-agent) > /dev/null 2>&1
+
+  function cleanup {
+    echo "Killing SSH-Agent"
+    kill -9 $SSH_AGENT_PID
+  }
+
+  trap cleanup EXIT
+
+  # chrome related
+  alias chrome="'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'"
+  alias devdocs="chrome --app=http://devdocs.io"
+
+  # phpbrew related
+  phpbrew lookup-prefix homebrew > /dev/null 2>&1
 fi

@@ -48,6 +48,7 @@ path=(
   $(brew --prefix coreutils 2> /dev/null)/libexec/gnubin # on failure, see next stmt
   $(brew --prefix gnu-sed 2> /dev/null)/libexec/gnubin # on failure, see next stmt
   $(brew --prefix gnu-tar 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  $HOME/.composer/vendor/bin
   $path
 )
 
@@ -62,15 +63,22 @@ path=($^path(N))
 # Set the default Less options.
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
-export LESS='-g -i -M -R -S -w -z-8'
+export LESS='-i -M -R -w -z-8'
 
-# Set the Less input preprocessor.
-# Try source-highlight first
-if [[ -x "$(which src-hilite-lesspipe.sh)" ]]; then
-  export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
-# Try both `lesspipe` and `lesspipe.sh` as either might exist on a system.
+# Set the Less input preprocessor. YES SYNTAX HIGHLIGHT YES YES YES
+
+# Try source-highlight. It can call lesspipe if appropiate
+if (( $#commands[(i)src-hilite-lesspipe(|.sh)] )); then
+  export LESSOPEN="| /usr/bin/env $commands[(i)src-hilite-lesspipe(|.sh)] %s 2>&-"
+
+# Try both `lesspipe` and `lesspipe.sh`. It can call pygmentize if
+# properly configured and appropiate
 elif (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
+
+# Try pygmentize
+elif (( $#commands[pygmentize] )); then
+  export LESSOPEN="| $commands[pygmentize] %s 2>&-"
 fi
 
 #
