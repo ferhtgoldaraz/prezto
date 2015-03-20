@@ -74,4 +74,10 @@ if [[ "$OSTYPE" == darwin* ]]; then
 
   # phpbrew related
   phpbrew lookup-prefix homebrew > /dev/null 2>&1
+
+  # set java home
+  export JAVA_HOME=$(/usr/libexec/java_home -v 1.8 2> /dev/null)
+
+  # kvm
+  source kvm.sh 2> /dev/null
 fi
