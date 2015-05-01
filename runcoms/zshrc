@@ -38,28 +38,65 @@ function bitnami-env() {
   fi
 }
 
+function sshmount() {
+
+    sshfs "$1" "$2"                                  \
+        -o reconnect                                 \
+        -o allow_other                               \
+        -o uid=$(id -u)                              \
+        -o gid=$(id -g)                              \
+        -o idmap=user                                \
+        -o IdentityFile=${3:="$HOME/.ssh/id_ecdsa"}
+}
+
 # Mac OS especific
 if [[ "$OSTYPE" == darwin* ]]; then
+
+    # Homebrew
+    if type brew &> /dev/null; then
+
+        ( brew update && brew upgrade ) &> /dev/null &!
+
+        dest="/usr/local/share/zsh/site-functions/brew_zsh_completion.zsh"
+        target="$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh"
+
+        if [[ ! -h "$dest" ]]; then
+            ln -s "$target" "$dest"
+        fi
+    else
+        url="https://raw.githubusercontent.com/Homebrew/install/master/install"
+        (
+            ruby -e "$(curl -fsSL "$url" )" &> /dev/null;
+
+            dest="/usr/local/share/zsh/site-functions/brew_zsh_completion.zsh"
+            target="$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh"
+
+            if [[ ! -h "$dest" ]]; then
+                ln -s "$target" "$dest"
+            fi
+        ) &!
+    fi
 
   	# set MANPATH var. The crap about man.conf
   	# has gotten me tired, and I don't see anything in the
   	# mappings that's not already included before in `man --path`
-  	# though MANPATH lines, so just set it to whatever `man --path` is
+  	# through MANPATH lines, so just set it to whatever `man --path` is
   	if [ -z "$MANPATH" ]; then
-  		MANPATH=$(man --path)
-	fi
+  		  MANPATH=$(man --path)
+    fi
 
 	# shadow bsd man pages with gnu ones, if findable
-	brew --prefix coreutils &> /dev/null || return 1
-	brew --prefix gnu-sed &> /dev/null || return 1
+  MANPATH="$(find $(brew --prefix) -name man | tr '\n' ':')$MANPATH"
+  MANPATH="$(find $(brew --prefix) -name gnuman | tr '\n' ':')$MANPATH"
 
-    MANPATH="$(find $(brew --prefix) -name man | tr '\n' ':')$MANPATH"
-    MANPATH="$(find $(brew --prefix) -name gnuman | tr '\n' ':')$MANPATH"
 	export MANPATH
 
   # following the brew instructions...
   sudo pkill ssh-agent
   eval $(ssh-agent) > /dev/null 2>&1
+
+  # alias it
+  alias ressh-agent='sudo pkill ssh-agent; eval $(ssh-agent)'
 
   function cleanup {
     echo "Killing SSH-Agent"
@@ -80,4 +117,17 @@ if [[ "$OSTYPE" == darwin* ]]; then
 
   # kvm
   source kvm.sh 2> /dev/null
+
+  # nvm
+  type nvm &> /dev/null ||                                             \
+  {                                                                    \
+    git                                                                \
+      clone https://github.com/creationix/nvm.git                      \
+      $HOME/.nvm                                                       \
+      &> /dev/null                                                 &&  \
+    cd ~/.nvm                                                      &&  \
+    git checkout `git describe --abbrev=0 --tags` &> /dev/null     &&  \
+    cd;                                                                \
+  }
+
 fi
