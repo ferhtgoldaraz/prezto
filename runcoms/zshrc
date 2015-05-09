@@ -105,6 +105,12 @@ if [[ "$OSTYPE" == darwin* ]]; then
 
   trap cleanup EXIT
 
+  # go related
+  export GOPATH=$HOME/Go
+  export GOROOT=/usr/local/opt/go/libexec
+  export PATH=$PATH:$GOPATH/bin
+  export PATH=$PATH:$GOROOT/bin
+
   # chrome related
   alias chrome="'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'"
   alias devdocs="chrome --app=http://devdocs.io"
@@ -115,8 +121,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
   # set java home
   export JAVA_HOME=$(/usr/libexec/java_home -v 1.8 2> /dev/null)
 
-  # kvm
-  source kvm.sh 2> /dev/null
+  # dnvm
+  source dnvm.sh 2> /dev/null
 
   # nvm
   type nvm &> /dev/null ||                                             \

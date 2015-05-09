@@ -17,8 +17,8 @@ fi
 # Editors
 #
 
-export EDITOR='subl'
-export VISUAL='subl'
+export EDITOR='nano'
+export VISUAL='nano'
 export PAGER='less'
 
 #
@@ -48,6 +48,7 @@ path=(
   $(brew --prefix coreutils 2> /dev/null)/libexec/gnubin # on failure, see next stmt
   $(brew --prefix gnu-sed 2> /dev/null)/libexec/gnubin # on failure, see next stmt
   $(brew --prefix gnu-tar 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  /usr/local/opt/go/libexec/bin
   $HOME/.composer/vendor/bin
   $path
 )
