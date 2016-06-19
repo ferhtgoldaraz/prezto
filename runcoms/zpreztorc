@@ -37,12 +37,14 @@ zstyle ':prezto:load' zmodule \
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
+  'tmux' \
   'environment' \
   'terminal' \
   'editor' \
   'history' \
   'directory' \
   'spectrum' \
+  'gnu-utility' \
   'utility' \
   'ssh' \
   'completion' \
@@ -52,7 +54,6 @@ zstyle ':prezto:load' pmodule \
   'archive' \
   'directory' \
   'dpkg' \
-  'fasd' \
   'gpg' \
   'git' \
   'helper' \
@@ -61,6 +62,7 @@ zstyle ':prezto:load' pmodule \
   'ruby' \
   'syntax-highlighting' \
   'history-substring-search' \
+  'autosuggestions' \
   'prompt' \
 
 #
@@ -184,10 +186,10 @@ zstyle ':prezto:module:syntax-highlighting' highlighters \
 #
 
 # Auto start a session when Zsh is launched in a local terminal.
-# zstyle ':prezto:module:tmux:auto-start' local 'yes'
+zstyle ':prezto:module:tmux:auto-start' local 'yes'
 
 # Auto start a session when Zsh is launched in a SSH connection.
-# zstyle ':prezto:module:tmux:auto-start' remote 'yes'
+zstyle ':prezto:module:tmux:auto-start' remote 'yes'
 
 # Integrate with iTerm2.
 # zstyle ':prezto:module:tmux:iterm' integrate 'yes'
