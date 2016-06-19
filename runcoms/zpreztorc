@@ -40,11 +40,11 @@ zstyle ':prezto:load' pmodule \
   'tmux' \
   'environment' \
   'terminal' \
+  'gnu-utility' \
   'editor' \
   'history' \
   'directory' \
   'spectrum' \
-  'gnu-utility' \
   'utility' \
   'ssh' \
   'completion' \

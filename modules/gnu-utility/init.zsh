@@ -45,16 +45,47 @@ _gnu_utility_cmds=(
   'getopt' 'grep' 'indent' 'sed' 'tar' 'time' 'units' 'which'
 )
 
+## NOTE: OVERRIDEN the logic, it was making everything slow in OSX
 # Wrap GNU utilities in functions.
+_symlinks_path="$HOME/bin"
 for _gnu_utility_cmd in "${_gnu_utility_cmds[@]}"; do
+
+  # if there's no dir to place the symlinks, we're done
+  if [ ! -d "$_symlinks_path" ]; then
+    break
+  fi
+
   _gnu_utility_pcmd="${_gnu_utility_p}${_gnu_utility_cmd}"
   if (( ${+commands[${_gnu_utility_pcmd}]} )); then
-    eval "
-      function ${_gnu_utility_cmd} {
-        '${commands[${_gnu_utility_pcmd}]}' \"\$@\"
-      }
-    "
+
+    _link_path="$_symlinks_path/${_gnu_utility_cmd}"
+
+    # if the link exists and is not broken, skip to the next command
+    if [ -L "$_link_path" ] && [ -e "$_link_path" ]; then
+      continue
+    fi
+
+    _target="$(find "$(brew --prefix 2> /dev/null)" -name ${_gnu_utility_pcmd} | head -n 1)"
+
+    # if the target does not exist, skipt to the next command
+    if [ ! -f "$_target" ]; then
+      continue
+    fi
+
+    # shadow BSD commands with GNU ones using symlinks
+    # assumes the target path is in the path :)
+    ln -sf "$_target" "$_link_path"
+
+    ## ORIGINAL CODE (renders everything painfully slow in OSX)
+    # eval "
+    #   function ${_gnu_utility_cmd} {
+    #     '${commands[${_gnu_utility_pcmd}]}' \"\$@\"
+    #   }
+    # "
   fi
 done
 
 unset _gnu_utility_{p,cmds,cmd,pcmd}
+unset _symlinks_path
+unset _target
+unset _link_path
