@@ -67,19 +67,6 @@ if [[ "$OSTYPE" == darwin* ]]; then
         fi
     fi
 
-	# set MANPATH var. The crap about man.conf
-	# has gotten me tired, and I don't see anything in the
-	# mappings that's not already included before in `man --path`
-	# through MANPATH lines, so just set it to whatever `man --path` is
-	if [ -z "$MANPATH" ]; then
-        MANPATH=$(man --path)
-    fi
-
-	# shadow bsd man pages with gnu ones, if findable
-    MANPATH="$(find $(brew --prefix) -name man | tr '\n' ':')$MANPATH"
-    MANPATH="$(find $(brew --prefix) -name gnuman | tr '\n' ':')$MANPATH"
-	export MANPATH
-
     # set java home
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8 2> /dev/null)
 
@@ -88,7 +75,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
 fi
 
 # if phpbrew, source
-. ~/.phpbrew/bashrc &> /dev/null
+source ~/.phpbrew/bashrc &> /dev/null
 
 # up; will be sourced on the next run
 if command -v curl &> /dev/null; then
