@@ -30,32 +30,21 @@ function sshmount() {
         -o IdentityFile=${3:="$HOME/.ssh/id_rsa"}
 }
 
+# if phpbrew, source
+# this must go before the mac block
+if [ -f ~/.phpbrew/bashrc ]; then
+    source ~/.phpbrew/bashrc &> /dev/null
+fi
+
 # Mac OS especific
 if [[ "$OSTYPE" == darwin* ]]; then
 
     # Homebrew
     if type brew &> /dev/null; then
-
-        ( brew update && brew upgrade ) &> /dev/null &!
-
-        dest="/usr/local/share/zsh/site-functions/brew_zsh_completion.zsh"
-        target="$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh"
-
-        if [[ ! -h "$dest" ]]; then
-            ln -s "$target" "$dest"
-        fi
+        ( brew update && brew upgrade; ) &> /dev/null &!
     else
         url="https://raw.githubusercontent.com/Homebrew/install/master/install"
-        (
-            ruby -e "$(curl -fsSL "$url" )" &> /dev/null;
-
-            dest="/usr/local/share/zsh/site-functions/brew_zsh_completion.zsh"
-            target="$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh"
-
-            if [[ ! -h "$dest" ]]; then
-                ln -s "$target" "$dest"
-             fi
-        ) &!
+        ( ruby -e "$(curl -fsSL "$url" )" &> /dev/null; ) &!
     fi
 
     # only if `homebrew` is installed
@@ -71,11 +60,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8 2> /dev/null)
 
     # phpbrew related for mac
-    command -v phpbrew &> /dev/null && phpbrew lookup-prefix homebrew > /dev/null 2>&1
+    { command -v phpbrew  && phpbrew lookup-prefix homebrew } &> /dev/null
 fi
-
-# if phpbrew, source
-source ~/.phpbrew/bashrc &> /dev/null
 
 # up; will be sourced on the next run
 if command -v curl &> /dev/null; then
@@ -91,3 +77,5 @@ fi
 
 # thefuck
 command -v thefuck &> /dev/null && eval "$(thefuck --alias)" && unsetopt correct
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

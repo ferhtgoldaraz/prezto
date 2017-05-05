@@ -1,3 +1,6 @@
+# set LANG to english
+export LANG='en_US.UTF-8'
+
 #
 # Initializes Prezto.
 #
