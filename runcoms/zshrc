@@ -79,3 +79,6 @@ fi
 command -v thefuck &> /dev/null && eval "$(thefuck --alias)" && unsetopt correct
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# final options
+unsetopt nomatch # fix extendedglob git log HEAD^ issues
