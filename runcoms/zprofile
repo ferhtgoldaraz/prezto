@@ -46,9 +46,9 @@ path=(
   /usr/local/{bin,sbin}
   $HOME/bin
   $HOME/.composer/vendor/bin
-  $(brew --prefix coreutils 2> /dev/null)/libexec/gnubin # on failure, see next stmt
-  $(brew --prefix gnu-sed 2> /dev/null)/libexec/gnubin # on failure, see next stmt
-  $(brew --prefix gnu-tar 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  # $(brew --prefix coreutils 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  # $(brew --prefix gnu-sed 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  # $(brew --prefix gnu-tar 2> /dev/null)/libexec/gnubin # on failure, see next stmt
   $path
 )
 

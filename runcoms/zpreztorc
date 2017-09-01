@@ -40,7 +40,6 @@ zstyle ':prezto:load' pmodule \
   'tmux' \
   'environment' \
   'terminal' \
-  'gnu-utility' \
   'editor' \
   'history' \
   'directory' \

@@ -17,8 +17,11 @@ fi
 alias please="/usr/bin/sudo "
 alias grep="grep --color=always"
 
-function sshmount() {
+if (( $+commands[nvim] )); then
+    alias vim="nvim"
+fi
 
+function sshmount() {
     command -v sshfs || { echo 'sshfs could not be found.' && return 1; }
 
     sshfs "$1" "$2"                                  \
@@ -32,32 +35,6 @@ function sshmount() {
 
 # Mac OS especific
 if [[ "$OSTYPE" == darwin* ]]; then
-
-    # Homebrew
-    if type brew &> /dev/null; then
-
-        ( brew update && brew upgrade ) &> /dev/null &!
-
-        dest="/usr/local/share/zsh/site-functions/brew_zsh_completion.zsh"
-        target="$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh"
-
-        if [[ ! -h "$dest" ]]; then
-            ln -s "$target" "$dest"
-        fi
-    else
-        url="https://raw.githubusercontent.com/Homebrew/install/master/install"
-        (
-            ruby -e "$(curl -fsSL "$url" )" &> /dev/null;
-
-            dest="/usr/local/share/zsh/site-functions/brew_zsh_completion.zsh"
-            target="$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh"
-
-            if [[ ! -h "$dest" ]]; then
-                ln -s "$target" "$dest"
-             fi
-        ) &!
-    fi
-
     # only if `homebrew` is installed
     if command -v brew >/dev/null 2>&1; then
         # Load rupa's z if installed
@@ -67,21 +44,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
         fi
     fi
 
-	# set MANPATH var. The crap about man.conf
-	# has gotten me tired, and I don't see anything in the
-	# mappings that's not already included before in `man --path`
-	# through MANPATH lines, so just set it to whatever `man --path` is
-	if [ -z "$MANPATH" ]; then
-        MANPATH=$(man --path)
-    fi
-
-	# shadow bsd man pages with gnu ones, if findable
-    MANPATH="$(find $(brew --prefix) -name man | tr '\n' ':')$MANPATH"
-    MANPATH="$(find $(brew --prefix) -name gnuman | tr '\n' ':')$MANPATH"
-	export MANPATH
-
     # set java home
-    export JAVA_HOME=$(/usr/libexec/java_home -v 1.8 2> /dev/null)
+    export JAVA_HOME=$(/usr/libexec/java_home -v 1.7 2> /dev/null)
 
     # phpbrew related for mac
     command -v phpbrew &> /dev/null && phpbrew lookup-prefix homebrew > /dev/null 2>&1
@@ -96,7 +60,7 @@ if command -v curl &> /dev/null; then
     . "$HOME/.config/up/up.sh"
   else
     (                                                                       \
-      curl --create-dirs -so "$HOME/.config/up/up.sh"                       \
+      curl --create-dirs -so "$HOME/.config/up/up.sh"                        \
       https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh      \
     ) &!
   fi
