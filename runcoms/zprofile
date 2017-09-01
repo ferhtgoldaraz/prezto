@@ -44,11 +44,9 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   /usr/local/{bin,sbin}
-  $HOME/bin
-  $HOME/.composer/vendor/bin
-  # $(brew --prefix coreutils 2> /dev/null)/libexec/gnubin # on failure, see next stmt
-  # $(brew --prefix gnu-sed 2> /dev/null)/libexec/gnubin # on failure, see next stmt
-  # $(brew --prefix gnu-tar 2> /dev/null)/libexec/gnubin # on failure, see next stmt
+  "$HOME/bin",
+  "$HOME/.local/bin"
+  "$HOME/.composer/vendor/bin"
   $path
 )
 
@@ -65,9 +63,9 @@ path=($^path(N))
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
 export LESS='-i -M -R -w -z-8'
 
-# Set the Less input preprocessor. YES SYNTAX HIGHLIGHT YES YES YES
+# Set the Less input preprocessor.
 
-# Try source-highlight. It can call lesspipe if appropiate
+# Try source-highlight. It can call lesspipe if compressed files
 if (( $#commands[(i)src-hilite-lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)src-hilite-lesspipe(|.sh)] %s 2>&-"
 
@@ -86,8 +84,7 @@ fi
 #
 
 if [[ ! -d "$TMPDIR" ]]; then
-  export TMPDIR="/tmp/$LOGNAME"
-  mkdir -p -m 700 "$TMPDIR"
+  export TMPDIR="$(mktemp -d)"
 fi
 
 TMPPREFIX="${TMPDIR%/}/zsh"
