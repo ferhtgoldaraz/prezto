@@ -19,7 +19,10 @@ setopt CORRECT
 
 # Disable correction.
 alias ack='nocorrect ack'
-alias cd='nocorrect cd'
+# new zsh version choke on parsing (not even executing) a function based on
+# an alias, because it would be wrong nayway. in order for RVM's cd function
+# to be what it needs to be, we need to disable this cd alias
+# alias cd='nocorrect cd'
 alias cp='nocorrect cp'
 alias ebuild='nocorrect ebuild'
 alias gcc='nocorrect gcc'
