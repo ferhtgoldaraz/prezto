@@ -67,12 +67,18 @@ export LESS='-i -M -R -w -z-8'
 
 # Try source-highlight. It can call lesspipe if compressed files
 if (( $#commands[(i)src-hilite-lesspipe(|.sh)] )); then
-  export LESSOPEN="| /usr/bin/env $commands[(i)src-hilite-lesspipe(|.sh)] %s 2>&-"
+  # source-highlight will try to fallback to lesspipe for compressed files archives
+  # but it might call it as "lesspipe" instead of "lesspipe.sh"
+  if (( $#commands[(i)lesspipe.sh] )) && ! (( $#commands[(i)lesspipe] )); then
+    alias 'lesspipe=lesspipe.sh'
+  fi
+
+  export LESSOPEN="| /usr/bin/env $commands[(i)src-hilite-lesspipe(|.sh)] %s 2>&-" LESS_ADVANCED_PREPROCESSOR=1
 
 # Try both `lesspipe` and `lesspipe.sh`. It can call pygmentize if
 # properly configured and appropiate
 elif (( $#commands[(i)lesspipe(|.sh)] )); then
-  export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
+  export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-" LESS_ADVANCED_PREPROCESSOR=1
 
 # Try pygmentize
 elif (( $#commands[pygmentize] )); then

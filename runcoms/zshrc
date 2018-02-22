@@ -60,7 +60,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
     fi
 
     # set java home
-    export JAVA_HOME=$(/usr/libexec/java_home -v 1.7 2> /dev/null)
+    export JAVA_HOME=$(/usr/libexec/java_home -v 9 2> /dev/null)
 
     # phpbrew related for mac
     { command -v phpbrew  && phpbrew lookup-prefix homebrew } &> /dev/null
@@ -72,7 +72,7 @@ if command -v curl &> /dev/null; then
     . "$HOME/.config/up/up.sh"
   else
     (                                                                       \
-      curl --create-dirs -so "$HOME/.config/up/up.sh"                        \
+      curl --create-dirs -so "$HOME/.config/up/up.sh"                       \
       https://raw.githubusercontent.com/shannonmoeller/up/master/up.sh      \
     ) &!
   fi
@@ -85,3 +85,12 @@ command -v thefuck &> /dev/null && eval "$(thefuck --alias)" && unsetopt correct
 
 # final options
 unsetopt nomatch # fix extendedglob git log HEAD^ issues
+
+
+function sep() {
+    echo
+    echo
+    echo '================================================================================'
+    echo
+    echo
+}
