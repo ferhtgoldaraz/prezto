@@ -47,6 +47,7 @@ path=(
   "$HOME/bin",
   "$HOME/.local/bin"
   "$HOME/.composer/vendor/bin"
+  "$HOME/.cargo/bin"
   $path
 )
 
@@ -74,6 +75,15 @@ if (( $#commands[(i)src-hilite-lesspipe(|.sh)] )); then
   fi
 
   export LESSOPEN="| /usr/bin/env $commands[(i)src-hilite-lesspipe(|.sh)] %s 2>&-" LESS_ADVANCED_PREPROCESSOR=1
+
+elif [ -r /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
+  # source-highlight will try to fallback to lesspipe for compressed files archives
+  # but it might call it as "lesspipe" instead of "lesspipe.sh"
+  if (( $#commands[(i)lesspipe.sh] )) && ! (( $#commands[(i)lesspipe] )); then
+    alias 'lesspipe=lesspipe.sh'
+  fi
+
+  export LESSOPEN="|  /usr/share/source-highlight/src-hilite-lesspipe.sh %s 2>&-" LESS_ADVANCED_PREPROCESSOR=1
 
 # Try both `lesspipe` and `lesspipe.sh`. It can call pygmentize if
 # properly configured and appropiate
