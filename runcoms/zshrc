@@ -90,7 +90,9 @@ unsetopt nomatch # fix extendedglob git log HEAD^ issues
 function sep() {
     echo
     echo
-    echo '================================================================================'
+    echo
+    echo $(printf '=%.0s' {1..$(tput cols)})
+    echo
     echo
     echo
 }
