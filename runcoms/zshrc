@@ -96,3 +96,27 @@ function sep() {
     echo
     echo
 }
+
+isNpmOn=true
+function toggleNpm () {
+    # this shadows npm
+    if $isNpmOn; then
+        function npm() {
+            echo '"npm" is disabled; use "toggleNpm" to enable it.'
+        }
+
+        isNpmOn=false
+    # this unsets our shadowing function and makes npm accessible
+    else
+        unset -f npm
+        isNpmOn=true
+
+        echo '"npm" is enabled; use "toggleNpm" to disable it.' 
+    fi
+}
+
+# toggle npm off
+toggleNpm
+
+alias n='pnpm'
+alias x='pnpx'
