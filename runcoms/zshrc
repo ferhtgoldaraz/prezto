@@ -60,7 +60,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
     fi
 
     # set java home
-    export JAVA_HOME=$(/usr/libexec/java_home -v 9 2> /dev/null)
+    export JAVA_HOME=$(/usr/libexec/java_home -v 10 2> /dev/null)
 
     # phpbrew related for mac
     { command -v phpbrew  && phpbrew lookup-prefix homebrew } &> /dev/null
