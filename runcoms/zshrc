@@ -88,9 +88,9 @@ unsetopt nomatch # fix extendedglob git log HEAD^ issues
 
 
 function sep() {
-    print $'\n\n\n'
+    print $'\n\n\n\n'
     echo $(printf '=%.0s' {1..$(tput cols)})
-    print $'\n\n\n'
+    print $'\n\n\n\n'
 }
 
 isNpmOn=true
