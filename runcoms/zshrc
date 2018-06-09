@@ -88,21 +88,17 @@ unsetopt nomatch # fix extendedglob git log HEAD^ issues
 
 
 function sep() {
-    echo
-    echo
-    echo
+    print $'\n\n\n'
     echo $(printf '=%.0s' {1..$(tput cols)})
-    echo
-    echo
-    echo
+    print $'\n\n\n'
 }
 
 isNpmOn=true
-function toggleNpm () {
+function npmToggle () {
     # this shadows npm
     if $isNpmOn; then
         function npm() {
-            echo '"npm" is disabled; use "toggleNpm" to enable it.'
+            echo '"npm" is disabled; use "npmToggle" to enable it.'
         }
 
         isNpmOn=false
@@ -111,12 +107,12 @@ function toggleNpm () {
         unset -f npm
         isNpmOn=true
 
-        echo '"npm" is enabled; use "toggleNpm" to disable it.' 
+        echo '"npm" is enabled; use "npmToggle" to disable it.'
     fi
 }
 
 # toggle npm off
-toggleNpm
+npmToggle
 
 alias n='pnpm'
 alias x='pnpx'
