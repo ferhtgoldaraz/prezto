@@ -93,13 +93,18 @@ function sep() {
     print $'\n\n\n\n'
 }
 
-isNpmOn=true
+isNpmOn=
 function npmToggle () {
     # this shadows npm
     if $isNpmOn; then
         function npm() {
-            echo '"npm" is disabled; use "npmToggle" to enable it.'
+            # don't log the first time
+            # (by detecting that the value is not initialized)
+            if [ -n "$isNpmOn" ]; then
+                echo '"npm" is now disabled; use "npmToggle" to enable it.'
+            fi
         }
+        npm
 
         isNpmOn=false
     # this unsets our shadowing function and makes npm accessible
@@ -107,7 +112,7 @@ function npmToggle () {
         unset -f npm
         isNpmOn=true
 
-        echo '"npm" is enabled; use "npmToggle" to disable it.'
+        echo '"npm" is now enabled; use "npmToggle" to disable it.'
     fi
 }
 
