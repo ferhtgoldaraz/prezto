@@ -2,7 +2,7 @@
 # A simple theme that displays relevant, contextual information.
 #
 # Authors:
-#   Fer, based on... 
+#   Fer, based on...
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 # Screenshots:
@@ -55,7 +55,7 @@ function prompt_sorin_async_callback {
         fi
       else
         # Git target detected, update the git fragment and redisplay the prompt.
-        _prompt_sorin_git="${_git_target}${_git_post_target}"
+        _prompt_sorin_git="%F{3}[ ${_git_target}${_git_post_target}%F{3} ]"
         zle && zle reset-prompt
       fi
       ;;
@@ -115,8 +115,6 @@ function prompt_sorin_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent sp subst)
-  _prompt_sorin_precmd_async_pid=0
-  _prompt_sorin_precmd_async_data=$(mktemp "${TMPDIR:-/tmp}/sorin-prompt-async-XXXXXXXXXX")
 
   # Load required functions.
   autoload -Uz add-zsh-hook
@@ -149,14 +147,15 @@ function prompt_sorin_setup {
   zstyle ':prezto:module:git:info:keys' format \
     'status' '%b %p %c:%s%A%B%S%a%d%m%r%U%u'
 
+  # Set python-info format
+  zstyle ':prezto:module:python:info:virtualenv' format '%f%F{3}(%v)%F{7} '
+
   # Set up non-zero return value display
   local show_return="[ ✘ ]"
   # Default is to show the return value
   if zstyle -T ':prezto:module:prompt' show-return-val; then
     show_return='[ %? ]'
   fi
-  # Set python-info format
-  zstyle ':prezto:module:python:info:virtualenv' format '%f%F{3}(%v)%F{7} '
 
   # Get the async worker set up
   _sorin_cur_git_root=''
@@ -168,7 +167,7 @@ function prompt_sorin_setup {
   PROMPT='${SSH_TTY:+"%F{9}%n%f%F{7}@%f%F{3}%m%f "}%F{3}[ %F{4}${_prompt_sorin_pwd}%F{3} ]${_prompt_fer_newline}%(!. %B%F{1}#%f%b.)${editor_info[keymap]} '
   RPROMPT='%{${_prompt_fer_lineup} %}$python_info[virtualenv]${editor_info[overwrite]}%(?:: %F{1}'
   RPROMPT+=${show_return}
-  RPROMPT+='%f)${VIM:+" %B%F{6}V%f%b"}%F{3}[ ${_prompt_sorin_git}%F{3} ]%{${_prompt_fer_linedown}%}'
+  RPROMPT+='%f)${VIM:+" %B%F{6}V%f%b"}${_prompt_sorin_git}%{${_prompt_fer_linedown}%}'
   SPROMPT='zsh: correct %F{1}%R%f to %F{2}%r%f [nyae]? '
 }
 
