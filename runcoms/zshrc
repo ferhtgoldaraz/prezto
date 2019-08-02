@@ -64,6 +64,13 @@ if [[ "$OSTYPE" == darwin* ]]; then
 
     # phpbrew related for mac
     { command -v phpbrew  && phpbrew lookup-prefix homebrew } &> /dev/null
+
+    # alias for vlc
+    vlc_path='/Applications/VLC.app/Contents/MacOS/VLC'
+    if [ -x "$vlc_path" ]; then
+      alias vlc="$vlc_path"
+    fi
+    unset -v vlc_path
 fi
 
 # up; will be sourced on the next run
