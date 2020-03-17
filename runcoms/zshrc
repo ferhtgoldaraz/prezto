@@ -136,3 +136,7 @@ POWERLEVEL9K_MODE='nerdfont-complete'
 if [ -e /Users/fer/.nix-profile/etc/profile.d/nix.sh ]; then
     . /Users/fer/.nix-profile/etc/profile.d/nix.sh;
 fi
+
+if [ -e $(brew --prefix asdf)/asdf.sh ]; then
+    . $(brew --prefix asdf)/asdf.sh;
+fi
