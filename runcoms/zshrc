@@ -140,3 +140,8 @@ fi
 if [ -e $(brew --prefix asdf)/asdf.sh ]; then
     . $(brew --prefix asdf)/asdf.sh;
 fi
+
+# haskell ghcup for managing ghc versions I think
+if [ -f "$HOME/.ghcup/env" ]; then
+    . "/Users/fer/.ghcup/env"
+fi
